@@ -47,7 +47,27 @@ GameManager.prototype.setup = function () {
 
   // Update the actuator
   this.actuate();
+
+  // Start ticking
+  this.tickTime = 1000.0;
+  manager = this;
+  this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 };
+
+// Insert a random tile, schedule next tick
+GameManager.prototype.tick = function() {
+  this.prepareTiles()
+  this.addRandomTile();
+  if (!this.movesAvailable) {
+    this.over = true;
+    this.actuate();
+    return;
+  }
+  this.actuate();
+  this.tickTime *= 0.99;
+  manager = this;
+  this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
+}
 
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {
@@ -154,6 +174,9 @@ GameManager.prototype.move = function (direction) {
 
   if (moved) {
     this.addRandomTile();
+    manager = this;
+    clearTimeout(this.nextTick);
+    this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
