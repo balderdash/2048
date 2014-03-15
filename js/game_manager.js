@@ -57,6 +57,11 @@ GameManager.prototype.setup = function () {
 // Insert a random tile, schedule next tick
 GameManager.prototype.tick = function() {
   this.prepareTiles()
+  if (!this.grid.cellsAvailable()) {
+    this.over = true;
+    this.actuate();
+    return;
+  }
   this.addRandomTile();
   if (!this.movesAvailable) {
     this.over = true;
