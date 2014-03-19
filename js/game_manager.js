@@ -51,11 +51,17 @@ GameManager.prototype.setup = function () {
   // Start ticking
   this.tickTime = 1000.0;
   manager = this;
+  if (this.nextTick) {
+    clearTimeout(this.nextTick);
+  }
   this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 };
 
 // Insert a random tile, schedule next tick
 GameManager.prototype.tick = function() {
+  if (this.isGameTerminated()) {
+    return;
+  }
   this.prepareTiles()
   if (!this.grid.cellsAvailable()) {
     this.over = true;
