@@ -75,7 +75,6 @@ GameManager.prototype.tick = function() {
     return;
   }
   this.actuate();
-  this.tickTime *= 0.99;
   manager = this;
   this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 }
@@ -187,6 +186,7 @@ GameManager.prototype.move = function (direction) {
     this.addRandomTile();
     manager = this;
     clearTimeout(this.nextTick);
+    this.tickTime *= 0.998;
     this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 
     if (!this.movesAvailable()) {
