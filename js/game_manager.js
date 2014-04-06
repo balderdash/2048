@@ -77,6 +77,7 @@ GameManager.prototype.tick = function() {
   this.actuate();
   manager = this;
   this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
+  this.tickTime *= 0.998;
 }
 
 // Set up the initial tiles to start the game with
@@ -186,7 +187,6 @@ GameManager.prototype.move = function (direction) {
     this.addRandomTile();
     manager = this;
     clearTimeout(this.nextTick);
-    this.tickTime *= 0.998;
     this.nextTick = setTimeout(function(){manager.tick();}, this.tickTime);
 
     if (!this.movesAvailable()) {
